@@ -21,6 +21,16 @@ export default defineConfig({
   },
   devToolbar: { enabled: false },
   vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.endsWith('/three/build/three.core.js')) return 'three-core';
+            if (id.endsWith('/three/build/three.module.js')) return 'three-renderer';
+          },
+        },
+      },
+    },
     plugins: [{
       name: 'non-blocking-cjk-fonts',
       enforce: 'pre',

@@ -11,9 +11,11 @@ import horizon from '@phosphor-icons/core/assets/light/sun-horizon-light.svg?raw
 import plant from '@phosphor-icons/core/assets/light/plant-light.svg?raw';
 import list from '@phosphor-icons/core/assets/light/list-light.svg?raw';
 import check from '@phosphor-icons/core/assets/light/check-light.svg?raw';
+import play from '@phosphor-icons/core/assets/light/play-light.svg?raw';
+import pause from '@phosphor-icons/core/assets/light/pause-light.svg?raw';
 const icons: Record<string, string> = {
   'arrow-right': arrowRight, 'arrow-up-right': arrowUpRight, 'arrow-left': arrowLeft,
-  moon, sun, 'book-open': book, cpu, code, 'sun-horizon': horizon, plant, list, check,
+  moon, sun, 'book-open': book, cpu, code, 'sun-horizon': horizon, plant, list, check, play, pause,
 };
 interface Props { name: string; size?: number; class?: string; }
 const { name, size = 20, class: className = '' } = Astro.props;

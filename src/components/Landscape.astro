@@ -1,0 +1,79 @@
+---
+import Icon from './Icon.astro';
+import { url } from '../lib/blog';
+---
+<figure class="hero-landscape" data-landscape>
+  <div class="landscape-stage" data-state="poster">
+    <img class="landscape-poster landscape-day" src={url('images/landscape/day.webp')} srcset={`${url('images/landscape/day-500.webp')} 500w, ${url('images/landscape/day.webp')} 1000w`} sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) 44vw, 500px" width="1000" height="840" alt="俯视林间小岛：溪流、木桥、石径与一间安静的小屋。" fetchpriority="high" />
+    <img class="landscape-poster landscape-night" src={url('images/landscape/night.webp')} srcset={`${url('images/landscape/night-500.webp')} 500w, ${url('images/landscape/night.webp')} 1000w`} sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) 44vw, 500px" width="1000" height="840" alt="夜色中的林间小岛，小屋亮着暖灯。" loading="lazy" />
+    <canvas class="landscape-canvas" aria-label="林间小岛动态风景，溪水缓缓流动，树冠随风轻摇。" role="img" aria-hidden="true"></canvas>
+  </div>
+  <figcaption class="landscape-caption">
+    <span class="landscape-name">林间片刻</span>
+    <div class="landscape-controls">
+      <button class="landscape-ripple" type="button" disabled title="也可以直接点击溪流">泛起涟漪</button>
+      <button class="landscape-toggle" type="button" aria-label="播放风景动画" title="播放风景动画" data-playing="false">
+        <Icon name="play" class="landscape-play" size={17} />
+        <Icon name="pause" class="landscape-pause" size={17} />
+      </button>
+    </div>
+  </figcaption>
+</figure>
+
+<script>
+  const figure = document.querySelector<HTMLElement>('[data-landscape]');
+  if (figure) {
+    figure.dataset.enhanced = 'true';
+    const stage = figure.querySelector<HTMLElement>('.landscape-stage')!;
+    const canvas = figure.querySelector<HTMLCanvasElement>('canvas')!;
+    const toggle = figure.querySelector<HTMLButtonElement>('.landscape-toggle')!;
+    const ripple = figure.querySelector<HTMLButtonElement>('.landscape-ripple')!;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let api: Awaited<ReturnType<typeof import('../scripts/landscape.js')['createLandscape']>> | undefined;
+    let loading: Promise<void> | undefined;
+    let playing = false, dead = false;
+    function reflect(value: boolean) {
+      playing = value;
+      toggle.dataset.playing = String(value);
+      const label = value ? '暂停风景动画' : '播放风景动画';
+      toggle.setAttribute('aria-label', label); toggle.title = label;
+    }
+    async function start(explicit = false) {
+      if (dead || api || loading || stage.dataset.state === 'unavailable') return loading;
+      toggle.disabled = true;
+      loading = (async () => {
+        try {
+          const { createLandscape } = await import('../scripts/landscape.js');
+          if (dead || (!explicit && reduced.matches)) return;
+          api = await createLandscape(canvas, { playing: true, onState: reflect });
+          if (dead) { api.dispose(); return; }
+          if (!explicit && reduced.matches) api.setPlaying(false);
+          stage.dataset.state = 'ready'; canvas.setAttribute('aria-hidden', 'false'); ripple.disabled = false;
+        } catch {
+          stage.dataset.state = 'unavailable'; stage.parentElement!.dataset.unavailable = 'true'; reflect(false);
+        } finally { toggle.disabled = false; loading = undefined; }
+      })();
+      return loading;
+    }
+    toggle.addEventListener('click', async () => {
+      if (!api) await start(true); else api.setPlaying(!playing);
+    });
+    ripple.addEventListener('click', () => api?.ripple());
+    const watch = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        watch.disconnect();
+        if (!reduced.matches) {
+          if ('requestIdleCallback' in window) window.requestIdleCallback(() => void start(), { timeout: 1200 });
+          else setTimeout(() => void start(), 200);
+        }
+      }
+    }, { rootMargin: '100px' });
+    watch.observe(figure);
+    function motionPreference() { if (reduced.matches) api?.setPlaying(false); }
+    reduced.addEventListener('change', motionPreference);
+    addEventListener('pagehide', (event) => {
+      if (event.persisted) return;
+      dead = true; watch.disconnect(); reduced.removeEventListener('change', motionPreference); api?.dispose();
+    });
+  }
+</script>

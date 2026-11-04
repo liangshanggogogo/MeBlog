@@ -1,11 +1,19 @@
 # 素材说明
 
-## 首页手绘插画
+## 首页动态风景「林间片刻」
+
+- 实现：`src/components/Landscape.astro`、`src/scripts/landscape.js`、`src/shaders/stream.*.glsl`。
+- 由代码构建的原创场景，使用 Three.js（MIT）、WebGL2 和 GLSL；没有外部模型、纹理、音频或远程素材请求。
+- 静态后备图片：`public/images/landscape/day.webp`、`night.webp` 及对应的 `-500.webp` 版本，分别为 1000 × 840 与 500 × 420，保留透明通道。
+- 静态图片来自本场景的浏览器渲染，用于加载期间、减少动态效果及不支持 WebGL2 的浏览器。
+- 实现和维护说明见 [动态风景](landscape.md)。
+
+## 旧版首页手绘插画（保留为风格参考）
 
 - 文件：`public/images/growing-thoughts.webp`
 - 生成方式：内置 `image_gen`，2026-11-04。
 - 原始尺寸：1536 × 1024，带透明通道。
-- 网站版本：1200 × 800 WebP，保留透明通道；另有 480px、800px 宽的响应式版本，手机按需下载较小图片。
+- 保留版本：1200 × 800 WebP，保留透明通道；另有 480px、800px 宽的响应式版本。当前首页已替换为动态风景。
 - 构思：书页延伸为枝叶，以学习与独立思考连接技术、阅读与生活。
 - 未复制参考站的插画或品牌图标。
 
@@ -26,4 +34,4 @@ Use case: illustration-story. Asset type: original hero illustration for LIANG S
 
 ## 模块插画与文章封面
 
-四个模块的手绘图片位于 `public/images/modules/`，第一性原理文章封面位于 `src/content/articles/first-principles/assets/cover.webp`。2026-11-04 使用内置 `image_gen` 分别生成，以首页插画作为画法与配色参考；原文中的流程图保留。图片保留透明通道，采用 WebP 压缩。完整提示词、文件清单及后续封面规范见 [手绘插图规范](illustration-style.md)。
+四个模块的手绘图片位于 `public/images/modules/`，第一性原理文章封面位于 `src/content/articles/first-principles/assets/cover.webp`。2026-11-04 使用内置 `image_gen` 分别生成，以旧版首页插画作为画法与配色参考；原文中的流程图保留。图片保留透明通道，采用 WebP 压缩。完整提示词、文件清单及后续封面规范见 [手绘插图规范](illustration-style.md)。
