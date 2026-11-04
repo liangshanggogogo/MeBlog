@@ -54,6 +54,12 @@ draft: false
 
 文件夹名决定文章地址，例如 `first-principles/index.md` 对应 `/MeBlog/articles/first-principles/`。文章发布后尽量保留文件夹名，避免旧链接失效。
 
+### 统一文章入口
+
+顶部导航的「文章」打开 `/articles/`，集中展示四个模块、分类筛选、标题搜索与按时间倒序排列的文章。文章项包含手绘封面、标题、模块、阅读时长和日期。点击模块卡片或分类标签会直接筛选下方列表，搜索可以与模块筛选同时使用；按 `/` 聚焦搜索框，按 `Esc` 清除关键词。
+
+每个模块有可分享的地址 `/articles/category/{category}/`，关键词保存在网址的 `q` 参数中。刷新和浏览器前进、后退会保留对应状态。关闭 JavaScript 时，全部文章及模块筛选仍可通过静态页面浏览；标题搜索需要 JavaScript。旧的 `/categories/` 和各模块地址会跳转到统一文章入口及对应筛选页。以上路径在默认部署下均带 `/MeBlog` 前缀。
+
 ### 从 Notion 导出
 
 选择 **Export → Markdown & CSV**，解压导出文件，将 Markdown 和图片文件夹一起放进文章目录。将主 Markdown 重命名为 `index.md`，并在文件最前面填写上述文章信息。图片使用相对路径即可，不需要手动上传到图床。Notion 数据库、附件下载链接及特殊嵌入可能需要整理为普通表格、链接或图片。
@@ -78,7 +84,7 @@ sources:
     url: "https://example.com/announcement"
 ```
 
-「趋势 / 关注」使用与其他模块相同的图文列表和文章详情，也会出现在首页最新文章中。旧的 `/trends/`、`/trends/daily/` 和 `/trends/weekly/` 地址会跳转到 `/categories/trends/`。原先未发布的 `first-note.md` 已移动到文章目录，并保留为草稿。
+「趋势 / 关注」使用与其他模块相同的图文列表和文章详情，也会出现在首页最新文章中。旧的 `/trends/`、`/trends/daily/` 和 `/trends/weekly/` 地址会跳转到 `/articles/category/trends/`。原先未发布的 `first-note.md` 已移动到文章目录，并保留为草稿。
 
 ## GitHub Pages
 
@@ -105,7 +111,8 @@ sources:
 - 全站颜色、字体、间距和响应式布局：`src/styles/global.css`
 - 页眉、页脚与深色模式：`src/layouts/Base.astro`
 - 文章页：`src/pages/articles/[...slug].astro`
-- 首页与模块文章列表：`src/components/ArticleCards.astro`、`src/components/ArticleList.astro`
+- 首页最新文章：`src/components/ArticleCards.astro`
+- 统一文章入口：`src/components/ArticleArchive.astro`，筛选和搜索：`src/scripts/article-archive.ts`
 - 模块手绘插画：`public/images/modules/` 与 `src/components/ModuleArt.astro`
 - 首页静态插画：`public/images/exploration-workbench*.webp`，说明见 `docs/hero-illustration.md`
 - 保留的动态场景：`src/components/Landscape.astro` 与 `src/components/CafeScene.astro`，当前首页未启用

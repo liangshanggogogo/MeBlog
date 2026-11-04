@@ -1,14 +1,14 @@
 ---
 import Icon from './Icon.astro';
 import ModuleArt from './ModuleArt.astro';
-import { categories, url, type Article } from '../lib/blog';
-interface Props { articles: Article[]; headingLevel?: 'h2' | 'h3'; }
-const { articles, headingLevel: Heading = 'h3' } = Astro.props;
+import { categories, categoryUrl, type Article, type CategoryId } from '../lib/blog';
+interface Props { articles: Article[]; headingLevel?: 'h2' | 'h3'; archive?: boolean; selected?: CategoryId; }
+const { articles, headingLevel: Heading = 'h3', archive = false, selected } = Astro.props;
 ---
-<div class="category-grid">
+<div class:list={['category-grid', { 'archive-modules': archive }]}>
   {categories.map((category) => {
     const count = articles.filter((article) => article.data.category === category.id).length;
-    return <a class="category-item" href={url(`categories/${category.id}/`)}>
+    return <a class="category-item" href={categoryUrl(category.id)} data-category-filter={category.id} data-category-name={category.name} aria-current={selected === category.id ? 'page' : undefined}>
       <div class="category-icon"><ModuleArt category={category.id} /><Icon name="arrow-up-right" size={17} /></div>
       <Heading>{category.name}</Heading>
       <p>{category.description}</p>

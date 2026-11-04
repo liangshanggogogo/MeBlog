@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { categoryFor, articleUrl, shortDate, url, type Article } from '../lib/blog';
+import { categoryFor, categoryUrl, articleUrl, shortDate, type Article } from '../lib/blog';
 interface Props { articles: Article[]; archive?: boolean; }
 const { articles, archive = false } = Astro.props;
 ---
@@ -13,7 +13,7 @@ const { articles, archive = false } = Astro.props;
       <h3>{article.data.title}</h3>
     </a>
     <div class="article-card-meta">
-      <a href={url(`categories/${article.data.category}/`)}>{categoryFor(article.data.category).name}</a>
+      <a href={categoryUrl(article.data.category)}>{categoryFor(article.data.category).name}</a>
       <time datetime={article.data.date.toISOString()}>{shortDate(article.data.date)}</time>
     </div>
   </article>)}

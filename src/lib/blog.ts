@@ -11,6 +11,7 @@ export type Article = CollectionEntry<'articles'>;
 export type CategoryId = typeof categories[number]['id'];
 export const categoryFor = (id: string) => categories.find((category) => category.id === id)!;
 export const url = (path = '') => `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
+export const categoryUrl = (id: CategoryId) => url(`articles/category/${id}/`);
 export const articleUrl = (article: Article) => url(`articles/${article.id.replace(/\/index$/, '')}/`);
 export const getArticles = async () => (await getCollection('articles', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf() || a.id.localeCompare(b.id));

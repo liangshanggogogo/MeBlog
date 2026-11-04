@@ -1,17 +1,4 @@
 ---
-import Base from '../../layouts/Base.astro';
-import ArticleList from '../../components/ArticleList.astro';
-import { categories, getArticles, url } from '../../lib/blog';
-const articles = await getArticles();
+import ArticleArchive from '../../components/ArticleArchive.astro';
 ---
-<Base title="全部文章" active="articles">
-  <div class="shell archive-page">
-    <header class="page-heading"><h1>写下来的，留下来。</h1><p>值得关注的变化、技术原理的拆解、项目实践的记录，以及系统与认知的思考。</p></header>
-    <nav class="category-tabs" aria-label="按模块阅读">
-      <a class="selected" href={url('articles/')} aria-current="page">全部文章 <span>{articles.length}</span></a>
-      {categories.map((category) => <a href={url(`categories/${category.id}/`)}>{category.name}<span>{articles.filter((a) => a.data.category === category.id).length}</span></a>)}
-    </nav>
-    {articles.length ? <ArticleList articles={articles} /> : <p class="empty-inline">第一篇文章正在路上。</p>}
-    <p class="archive-end">{articles.length ? '写作刚刚开始，慢慢积累。' : '这里会记录接下来的学习与思考。'}</p>
-  </div>
-</Base>
+<ArticleArchive />

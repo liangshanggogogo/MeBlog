@@ -1,0 +1,9 @@
+---
+import ArticleArchive from '../../../components/ArticleArchive.astro';
+import { categories } from '../../../lib/blog';
+export function getStaticPaths() {
+  return categories.map(category => ({ params: { category: category.id }, props: { category: category.id } }));
+}
+const { category } = Astro.props;
+---
+<ArticleArchive selected={category} />
