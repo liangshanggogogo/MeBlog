@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import CategoryGrid from '../components/CategoryGrid.astro';
 import ArticleCards from '../components/ArticleCards.astro';
-import Landscape from '../components/Landscape.astro';
 import { getArticles, url } from '../lib/blog';
 const articles = await getArticles();
 const latest = articles.slice(0, 6);
@@ -17,7 +16,9 @@ const latest = articles.slice(0, 6);
         <p class="hero-description">拆解技术，动手实践，也更新自己的认知。<br />把学到的东西讲清楚，记录 AI 时代的变化。</p>
         <a class="text-link hero-link" href={url('articles/')}>读一篇文章 <Icon name="arrow-right" size={21} /></a>
       </div>
-      <Landscape />
+      <figure class="hero-art">
+        <img src={url('images/exploration-workbench.webp')} srcset={`${url('images/exploration-workbench-480.webp')} 480w, ${url('images/exploration-workbench-800.webp')} 800w, ${url('images/exploration-workbench.webp')} 1200w`} sizes="(max-width: 767px) 330px, (max-width: 1023px) 42vw, 480px" width="1200" height="800" alt="摊开的书、推演草稿和笔记本电脑围绕着一座正在搭建的木质模块小桥，旁边放着待装的零件与铅笔。" fetchpriority="high" />
+      </figure>
     </section>
 
     <section class="latest-section" aria-labelledby="latest-title">

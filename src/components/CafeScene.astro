@@ -1,0 +1,94 @@
+---
+import Icon from './Icon.astro';
+import { url } from '../lib/blog';
+---
+<figure class="hero-cafe" data-cafe>
+  <div class="cafe-stage" data-state="poster">
+    <img class="cafe-poster" src={url('images/cafe/rainy-night.webp')} srcset={`${url('images/cafe/rainy-night-768.webp')} 768w, ${url('images/cafe/rainy-night.webp')} 1536w`} sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) 44vw, 560px" width="1536" height="1024" alt="像素画：雨夜的咖啡屋里，男生在琥珀色暖灯下用笔记本打字，桌上有热拿铁，身旁是咖啡机和糕点。落地窗外是雨痕、朦胧霓虹与车流。" fetchpriority="high" />
+    <canvas class="cafe-canvas" role="img" aria-label="雨夜咖啡屋动态像素画：男生安静打字，咖啡热气缓缓上升，雨滴滑过玻璃，朦胧车灯与撑伞行人从窗外经过。" aria-hidden="true"></canvas>
+  </div>
+  <figcaption class="cafe-caption">
+    <span>雨夜，窗边</span>
+    <div class="cafe-controls">
+      <button class="cafe-light" type="button" disabled aria-pressed="true" title="也可以点击画面中的吊灯">暖灯</button>
+      <button class="cafe-toggle" type="button" data-playing="false" aria-label="播放咖啡屋动画" title="播放咖啡屋动画">
+        <Icon name="play" class="cafe-play" size={17} /><Icon name="pause" class="cafe-pause" size={17} />
+      </button>
+    </div>
+  </figcaption>
+</figure>
+<style>
+  .hero-cafe { min-width: 0; align-self: center; }
+  .cafe-stage { position: relative; width: 100%; aspect-ratio: 3 / 2; overflow: hidden; background: #33271f; }
+  .cafe-poster, .cafe-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+  .cafe-canvas { opacity: 0; transition: opacity .3s ease; touch-action: pan-y; }
+  [data-state='ready'] .cafe-canvas { opacity: 1; }
+  [data-state='ready'] .cafe-poster { visibility: hidden; transition: visibility 0s .3s; }
+  .cafe-caption { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; color: var(--faint); font-family: var(--serif); font-size: 12px; letter-spacing: .08em; }
+  .cafe-controls { display: flex; align-items: center; gap: 12px; visibility: hidden; }
+  [data-enhanced='true'] .cafe-controls { visibility: visible; }
+  [data-unavailable='true'] .cafe-controls { display: none; }
+  .cafe-controls button { color: var(--muted); background: transparent; border: 0; }
+  .cafe-light { min-width: 44px; min-height: 44px; font-size: 11px; }
+  .cafe-light:hover { color: var(--accent); text-decoration: underline; }
+  .cafe-toggle { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; }
+  .cafe-toggle:hover { background: var(--accent-soft); color: var(--accent); }
+  .cafe-controls button:disabled { opacity: .35; cursor: default; }
+  :global(.cafe-pause), [data-playing='true'] :global(.cafe-play) { display: none; }
+  [data-playing='true'] :global(.cafe-pause) { display: inline-flex; }
+  @media(min-width:1024px) { :global(.hero:has([data-cafe])) { grid-template-columns: .93fr 1.07fr; gap: 36px; } }
+  @media(max-width:767px) { .hero-cafe { width: min(480px,100%); justify-self: center; margin-top: 8px; } }
+  @media(prefers-reduced-motion:reduce) { .cafe-canvas, .cafe-poster { transition: none; } }
+</style>
+<script>
+  const figure = document.querySelector<HTMLElement>('[data-cafe]');
+  if (figure) {
+    figure.dataset.enhanced = 'true';
+    const stage = figure.querySelector<HTMLElement>('.cafe-stage')!;
+    const canvas = figure.querySelector<HTMLCanvasElement>('canvas')!;
+    const poster = figure.querySelector<HTMLImageElement>('.cafe-poster')!;
+    const toggle = figure.querySelector<HTMLButtonElement>('.cafe-toggle')!;
+    const light = figure.querySelector<HTMLButtonElement>('.cafe-light')!;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let api: Awaited<ReturnType<typeof import('../scripts/cafe-scene.js')['createCafeScene']>> | undefined;
+    let loading: Promise<void> | undefined;
+    let playing = false, dead = false;
+    function reflect(value: boolean) {
+      playing = value; toggle.dataset.playing = String(value);
+      const label = value ? '暂停咖啡屋动画' : '播放咖啡屋动画';
+      toggle.setAttribute('aria-label', label); toggle.title = label;
+    }
+    async function start(explicit = false) {
+      if (dead || api || loading || stage.dataset.state === 'unavailable') return loading;
+      toggle.disabled = true;
+      loading = (async () => {
+        try {
+          const { createCafeScene } = await import('../scripts/cafe-scene.js');
+          if (dead || (!explicit && reduced.matches)) return;
+          api = await createCafeScene(canvas, { poster, playing: true, onState: reflect, onLampState: value => light.setAttribute('aria-pressed', String(value)) });
+          if (dead) { api.dispose(); return; }
+          if (!explicit && reduced.matches) api.setPlaying(false);
+          stage.dataset.state = 'ready'; canvas.setAttribute('aria-hidden', 'false'); light.disabled = false;
+        } catch {
+          stage.dataset.state = 'unavailable'; figure!.dataset.unavailable = 'true'; reflect(false);
+        } finally { toggle.disabled = false; loading = undefined; }
+      })();
+      return loading;
+    }
+    toggle.addEventListener('click', async () => { if (!api) await start(true); else api.setPlaying(!playing); });
+    light.addEventListener('click', () => { if (api) light.setAttribute('aria-pressed', String(api.toggleLamp())); });
+    const watch = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        watch.disconnect();
+        if (!reduced.matches) {
+          if ('requestIdleCallback' in window) window.requestIdleCallback(() => void start(), { timeout: 1200 });
+          else setTimeout(() => void start(), 200);
+        }
+      }
+    }, { rootMargin: '100px' });
+    watch.observe(figure);
+    function preference() { if (reduced.matches) api?.setPlaying(false); }
+    reduced.addEventListener('change', preference);
+    addEventListener('pagehide', (event) => { if (event.persisted) return; dead = true; watch.disconnect(); reduced.removeEventListener('change', preference); api?.dispose(); });
+  }
+</script>

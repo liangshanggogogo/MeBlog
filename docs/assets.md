@@ -1,6 +1,13 @@
 # 素材说明
 
-## 首页动态风景「林间片刻」
+## 当前首页静态插画「探索与实践」
+
+- 文件：`public/images/exploration-workbench.webp` 及 480px、800px 响应式版本。
+- 原稿：`src/assets/illustrations/exploration-workbench.png`，1536 × 1024，带透明通道。
+- 使用内置 `image_gen`，参考最初书页与枝叶插画的画法，重新绘制书本、草稿、笔记本电脑与搭建中的模块小桥。
+- 详细说明与实际提示词见 [首页静态插画](hero-illustration.md)。
+
+## 保留的动态风景「林间片刻」（首页未启用）
 
 - 实现：`src/components/Landscape.astro`、`src/scripts/landscape.js`、`src/shaders/stream.*.glsl`。
 - 由代码构建的原创场景，使用 Three.js（MIT）、WebGL2 和 GLSL；没有外部模型、纹理、音频或远程素材请求。
@@ -13,7 +20,7 @@
 - 文件：`public/images/growing-thoughts.webp`
 - 生成方式：内置 `image_gen`，2026-11-04。
 - 原始尺寸：1536 × 1024，带透明通道。
-- 保留版本：1200 × 800 WebP，保留透明通道；另有 480px、800px 宽的响应式版本。当前首页已替换为动态风景。
+- 保留版本：1200 × 800 WebP，保留透明通道；另有 480px、800px 宽的响应式版本。当前首页使用同画法的新插画「探索与实践」。
 - 构思：书页延伸为枝叶，以学习与独立思考连接技术、阅读与生活。
 - 未复制参考站的插画或品牌图标。
 

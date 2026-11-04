@@ -107,14 +107,14 @@ sources:
 - 文章页：`src/pages/articles/[...slug].astro`
 - 首页与模块文章列表：`src/components/ArticleCards.astro`、`src/components/ArticleList.astro`
 - 模块手绘插画：`public/images/modules/` 与 `src/components/ModuleArt.astro`
-- 首页动态风景：`src/components/Landscape.astro`、`src/scripts/landscape.js` 与 `src/shaders/`
-- 动态风景的静态预览：`public/images/landscape/`
+- 首页静态插画：`public/images/exploration-workbench*.webp`，说明见 `docs/hero-illustration.md`
+- 保留的动态场景：`src/components/Landscape.astro` 与 `src/components/CafeScene.astro`，当前首页未启用
 
 第一版采用暖纸色、墨绿、中文宋体与英文衬线字体，少量入场及悬停动画。深色模式默认跟随系统，手动切换后记住选择。启用系统“减少动态效果”时关闭自动动画。
 
-首页的「林间片刻」采用 Three.js、WebGL2 与 GLSL 实时绘制，展示溪流、木桥、树木与小屋。水纹、树冠、落叶和炊烟以 40 秒为完整周期循环；鼠标移动带来轻微视差，点击溪流或“泛起涟漪”可触发水波。支持暂停，夜间随全站主题点亮小屋。离开屏幕或切换到其他标签页时停止绘制，系统减少动态效果时先显示静帧，仍可手动播放。不支持 WebGL2 或关闭 JavaScript 时保留静态风景。实现说明见 [动态风景](docs/landscape.md)。
+首页使用「探索与实践」静态手绘插画：书本、草稿、电脑与正在搭建的模块小桥。画法延续铅笔线条、淡水彩与纸张留白。首页不加载 Three.js 或动画画布。素材、实际提示词与备选方案说明见 [首页插画](docs/hero-illustration.md)。此前的林间小岛、雨夜咖啡屋动态场景及相关素材完整保留，当前未在首页引入。
 
-字体随站点托管，不依赖外部字体服务。中文字体使用 `font-display: optional`：网络较慢时优先保持系统宋体显示，避免下载大字体后突然改变阅读排版；缓存命中时可直接使用站点字体。箭头、主题切换等功能图标来自 Phosphor。首页风景由代码构建；模块插画与文章封面由内置图像生成工具制作，素材说明见 `docs/assets.md`，插图提示词和后续制作规范见 `docs/illustration-style.md`。
+字体随站点托管，不依赖外部字体服务。中文字体使用 `font-display: optional`：网络较慢时优先保持系统宋体显示，避免下载大字体后突然改变阅读排版；缓存命中时可直接使用站点字体。箭头、主题切换等功能图标来自 Phosphor。首页、模块插画与文章封面由内置图像生成工具制作，素材说明见 `docs/assets.md`，文章插图提示词和后续制作规范见 `docs/illustration-style.md`。
 
 ## 演示稿件
 

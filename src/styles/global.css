@@ -74,6 +74,9 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; }
 .text-link:hover { text-decoration: underline; }
 .hero-link { margin-top: 28px; padding-block: 4px; border-bottom: 1px solid var(--accent); gap: 29px; }
 .hero-link:hover { text-decoration: none; }
+.hero-art { align-self: center; transform: rotate(-3deg); padding: 2px 0 2px 14px; }
+.hero-art img { width: 100%; aspect-ratio: 3 / 2; object-fit: contain; }
+[data-theme='dark'] .hero-art img { filter: brightness(.84) saturate(.77); }
 .hero-landscape { min-width: 0; align-self: center; }
 .landscape-stage { position: relative; width: 100%; aspect-ratio: 25 / 21; isolation: isolate; }
 .landscape-poster, .landscape-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -265,6 +268,7 @@ time { font-variant-numeric: tabular-nums; }
   .hero-description { margin-top: 17px; font-size: 13px; }
   .hero-link { margin-top: 21px; font-size: 13px; }
   .hero-landscape { width: min(480px, 100%); justify-self: center; margin-top: -9px; }
+  .hero-art { width: min(330px, 86%); justify-self: center; padding: 0; margin-top: -2px; }
   .landscape-caption { padding-inline: 14px; }
   .section-heading { padding-bottom: 13px; }
   .section-heading h2 { font-size: 22px; }
