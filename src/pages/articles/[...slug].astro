@@ -1,0 +1,42 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import { getArticles, url, categoryFor, dateLabel, readingMinutes, articleUrl } from '../../lib/blog';
+export async function getStaticPaths() {
+  return (await getArticles()).map((article) => ({ params: { slug: article.id.replace(/\/index$/, '') }, props: { article } }));
+}
+const { article } = Astro.props;
+const { Content, headings } = await render(article);
+const category = categoryFor(article.data.category);
+const jsonLd = {
+  '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.data.title,
+  description: article.data.description, datePublished: article.data.date.toISOString(),
+  ...(article.data.updated ? { dateModified: article.data.updated.toISOString() } : {}),
+  author: { '@type': 'Person', name: 'Liang Shang' },
+  mainEntityOfPage: new URL(articleUrl(article), Astro.site).href,
+};
+---
+<Base title={article.data.title} description={article.data.description} active="articles" article published={article.data.date}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
+  <div class="article-shell shell">
+    <div class="article-topline"><a class="quiet-link" href={url('articles/')}><Icon name="arrow-left" size={17} />全部文章</a></div>
+    <header class="article-heading">
+      <a class="category-label" href={url(`categories/${category.id}/`)}><Icon name={category.icon} size={18} />{category.name}</a>
+      <h1>{article.data.title}</h1>
+      <p class="article-deck">{article.data.description}</p>
+      <div class="byline"><span>Liang Shang</span><time datetime={article.data.date.toISOString()}>{dateLabel(article.data.date)}</time><span>约 {readingMinutes(article.body)} 分钟</span></div>
+      {article.data.updated && <p class="updated-date">更新于 {dateLabel(article.data.updated)}</p>}
+    </header>
+    <div class="reading-layout">
+      <TableOfContents headings={headings} />
+      <article class="prose"><Content /></article>
+    </div>
+    <div class="article-ending">
+      <Icon name="plant" size={30} /><p>感谢你读到这里。</p>
+      <div class="article-tags">{article.data.tags.map((tag) => <span>{tag}</span>)}</div>
+      <a class="text-link" href={url('articles/')}><Icon name="arrow-left" size={18} />回到全部文章</a>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,114 @@
+---
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/noto-serif-sc';
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/blog';
+interface Props {
+  title?: string;
+  description?: string;
+  active?: 'home' | 'articles' | 'categories';
+  article?: boolean;
+  published?: Date;
+}
+const {
+  title, description = 'Liang Shang 的个人博客。记录 AI 实践、技术学习、读书思考与日常生活。',
+  active = 'home', article = false, published,
+} = Astro.props;
+const pageTitle = title ? `${title} · LIANG SHANG BLOG` : 'LIANG SHANG BLOG · 在实践中探索，在记录中思考';
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f7f2" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="zh_CN" />
+    {published && <meta property="article:published_time" content={published.toISOString()} />}
+    <script is:inline>
+      (() => {
+        let theme;
+        try { theme = localStorage.getItem('liang-theme'); } catch {}
+        if (theme !== 'light' && theme !== 'dark') theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#20251f' : '#f7f7f2');
+      })();
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到正文</a>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="wordmark" href={url()} aria-label="LIANG SHANG BLOG 首页">
+          <Icon name="book-open" size={27} />
+          <span>LIANG SHANG <span class="wordmark-blog">BLOG</span></span>
+        </a>
+        <nav class="site-nav" aria-label="主导航">
+          <a href={url()} aria-current={active === 'home' ? 'page' : undefined}>首页</a>
+          <a href={url('articles/')} aria-current={active === 'articles' ? 'page' : undefined}>文章</a>
+          <a href={url('categories/')} aria-current={active === 'categories' ? 'page' : undefined}>分类</a>
+        </nav>
+        <button class="theme-toggle" type="button" aria-label="切换深色模式" title="切换深色模式">
+          <Icon name="moon" class="theme-moon" size={21} />
+          <Icon name="sun" class="theme-sun" size={21} />
+        </button>
+      </div>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer shell">
+      <div class="footer-top">
+        <div class="footer-note"><Icon name="plant" size={26} /><span>持续学习，慢慢生长。</span></div>
+        <a href="#main" class="back-top">回到顶部 <span aria-hidden="true">↑</span></a>
+      </div>
+      <div class="footer-bottom">
+        <span>© {new Date().getUTCFullYear()} Liang Shang</span>
+        <span>写下所学，也留下所想。</span>
+      </div>
+    </footer>
+    <script>
+      const root = document.documentElement;
+      const toggle = document.querySelector<HTMLButtonElement>('.theme-toggle');
+      const system = matchMedia('(prefers-color-scheme: dark)');
+      const reflectTheme = () => {
+        const dark = root.dataset.theme === 'dark';
+        const label = dark ? '切换浅色模式' : '切换深色模式';
+        toggle?.setAttribute('aria-label', label);
+        toggle?.setAttribute('title', label);
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#20251f' : '#f7f7f2');
+      };
+      reflectTheme();
+      toggle?.addEventListener('click', () => {
+        const theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = theme;
+        try { localStorage.setItem('liang-theme', theme); } catch {}
+        reflectTheme();
+      });
+      system.addEventListener('change', (event) => {
+        let choice = null;
+        try { choice = localStorage.getItem('liang-theme'); } catch {}
+        if (choice !== 'light' && choice !== 'dark') {
+          root.dataset.theme = event.matches ? 'dark' : 'light';
+          reflectTheme();
+        }
+      });
+      addEventListener('storage', (event) => {
+        if (event.key === 'liang-theme') {
+          root.dataset.theme = event.newValue === 'dark' || event.newValue === 'light'
+            ? event.newValue : system.matches ? 'dark' : 'light';
+          reflectTheme();
+        }
+      });
+    </script>
+  </body>
+</html>

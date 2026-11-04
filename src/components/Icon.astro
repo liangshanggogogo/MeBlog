@@ -1,0 +1,21 @@
+---
+import arrowRight from '@phosphor-icons/core/assets/light/arrow-right-light.svg?raw';
+import arrowUpRight from '@phosphor-icons/core/assets/light/arrow-up-right-light.svg?raw';
+import arrowLeft from '@phosphor-icons/core/assets/light/arrow-left-light.svg?raw';
+import moon from '@phosphor-icons/core/assets/light/moon-light.svg?raw';
+import sun from '@phosphor-icons/core/assets/light/sun-light.svg?raw';
+import book from '@phosphor-icons/core/assets/light/book-open-light.svg?raw';
+import cpu from '@phosphor-icons/core/assets/light/cpu-light.svg?raw';
+import code from '@phosphor-icons/core/assets/light/code-light.svg?raw';
+import horizon from '@phosphor-icons/core/assets/light/sun-horizon-light.svg?raw';
+import plant from '@phosphor-icons/core/assets/light/plant-light.svg?raw';
+import list from '@phosphor-icons/core/assets/light/list-light.svg?raw';
+import check from '@phosphor-icons/core/assets/light/check-light.svg?raw';
+const icons: Record<string, string> = {
+  'arrow-right': arrowRight, 'arrow-up-right': arrowUpRight, 'arrow-left': arrowLeft,
+  moon, sun, 'book-open': book, cpu, code, 'sun-horizon': horizon, plant, list, check,
+};
+interface Props { name: string; size?: number; class?: string; }
+const { name, size = 20, class: className = '' } = Astro.props;
+---
+<span class:list={['icon', className]} style={`--icon-size:${size}px`} aria-hidden="true" set:html={icons[name] || book} />

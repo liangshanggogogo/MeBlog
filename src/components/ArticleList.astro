@@ -1,0 +1,20 @@
+---
+import Icon from './Icon.astro';
+import { categoryFor, articleUrl, shortDate, readingMinutes, type Article } from '../lib/blog';
+interface Props { articles: Article[]; }
+const { articles } = Astro.props;
+const years = [...new Set(articles.map((article) => article.data.date.getUTCFullYear()))];
+---
+<div class="article-archive">
+  {years.map((year) => <section class="archive-year" aria-labelledby={`year-${year}`}>
+    <h2 id={`year-${year}`} class="year-label">{year}</h2>
+    <div class="year-articles">
+      {articles.filter((article) => article.data.date.getUTCFullYear() === year).map((article) => <article class="archive-entry">
+        <div class="article-meta"><span>{categoryFor(article.data.category).name}</span><span>约 {readingMinutes(article.body)} 分钟</span></div>
+        <h3><a href={articleUrl(article)}>{article.data.title}<Icon name="arrow-up-right" size={23} /></a></h3>
+        <p>{article.data.description}</p>
+        <time datetime={article.data.date.toISOString()}>{shortDate(article.data.date)}</time>
+      </article>)}
+    </div>
+  </section>)}
+</div>

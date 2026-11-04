@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import CategoryGrid from '../../components/CategoryGrid.astro';
+import { getArticles } from '../../lib/blog';
+const articles = await getArticles();
+---
+<Base title="文章分类" active="categories">
+  <div class="shell categories-page">
+    <header class="page-heading"><h1>兴趣，是最好的线索。</h1><p>从一个感兴趣的主题开始，看看我最近在学什么、想什么。</p></header>
+    <CategoryGrid articles={articles} />
+    <div class="categories-note"><p>学习与生活之间，没有那么清晰的边界。</p><span>这里的分类只是一条线索，文章也会彼此连接。</span></div>
+  </div>
+</Base>

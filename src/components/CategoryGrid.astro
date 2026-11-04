@@ -1,0 +1,17 @@
+---
+import Icon from './Icon.astro';
+import { categories, url, type Article } from '../lib/blog';
+interface Props { articles: Article[]; }
+const { articles } = Astro.props;
+---
+<div class="category-grid">
+  {categories.map((category) => {
+    const count = articles.filter((article) => article.data.category === category.id).length;
+    return <a class="category-item" href={url(`categories/${category.id}/`)}>
+      <div class="category-icon"><Icon name={category.icon} size={32} /><Icon name="arrow-up-right" size={17} /></div>
+      <h3>{category.name}</h3>
+      <p>{category.description}</p>
+      <span class="category-count">{count ? `${count} 篇文章` : '等待第一篇'}</span>
+    </a>;
+  })}
+</div>
