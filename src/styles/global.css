@@ -138,6 +138,33 @@ time { font-variant-numeric: tabular-nums; }
 .categories-note { margin-top: 70px; border-top: 1px solid var(--line); padding-top: 30px; }
 .categories-note p { font-family: var(--serif); font-size: 20px; }
 .categories-note span { display: block; margin-top: 12px; color: var(--muted); font-size: 14px; }
+.trends-page { min-height: 65dvh; }
+.trend-feed { max-width: 940px; padding-top: 36px; }
+.trend-month { margin-bottom: 36px; }
+.trend-month > h2 { font-size: 23px; color: var(--accent); margin-bottom: 10px; }
+.trend-entry { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 30px; padding-block: 26px 32px; border-bottom: 1px solid var(--line); scroll-margin-top: 24px; }
+.trend-date { display: flex; flex-direction: column; gap: 9px; font-size: 12px; color: var(--muted); padding-top: 4px; }
+.trend-date > span { color: var(--accent); font-size: 11px; }
+.trend-content { min-width: 0; }
+.trend-content > h3 { font-size: 23px; line-height: 1.7; text-wrap: pretty; }
+.prose.trend-body { font-size: 16px; }
+.prose.trend-body > :first-child { margin-top: 14px; }
+.prose.trend-body h2, .prose.trend-body h3 { font-size: 18px; margin-block: 23px 12px; }
+.prose.trend-body p, .prose.trend-body ul, .prose.trend-body ol { margin-block: 14px; }
+.prose.trend-body li { margin-block: 5px; }
+.trend-sources { display: flex; align-items: baseline; gap: 12px; color: var(--muted); font-size: 12px; margin-top: 22px; }
+.trend-sources > span { flex-shrink: 0; }
+.trend-sources ul { display: flex; flex-wrap: wrap; gap: 6px 18px; list-style: none; margin: 0; padding: 0; }
+.trend-sources a { color: var(--accent); text-decoration: underline; overflow-wrap: anywhere; }
+.trend-permalink { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; padding-block: 4px; font-size: 11px; color: var(--muted); }
+.trend-permalink:hover { color: var(--accent); }
+.home-updates { margin-top: 48px; }
+.home-updates ul { list-style: none; padding: 0; margin: 20px 0 0; }
+.home-updates li { display: grid; grid-template-columns: 90px 80px minmax(0, 1fr); align-items: baseline; gap: 20px; padding-block: 15px; }
+.home-updates li > time { font-size: 12px; color: var(--muted); }
+.home-updates li > span { font-size: 12px; color: var(--accent); }
+.home-updates li > a { display: flex; align-items: baseline; gap: 10px; font-family: var(--serif); font-size: 19px; }
+.home-updates li > a:hover { color: var(--accent); }
 .category-heading > .icon { color: var(--accent); margin-bottom: 12px; }
 .empty-state { padding: 64px 20px; text-align: center; color: var(--muted); }
 .empty-state > .icon { color: var(--accent); margin-bottom: 18px; }
@@ -284,6 +311,15 @@ time { font-variant-numeric: tabular-nums; }
   .categories-note { margin-top: 45px; padding-top: 24px; }
   .categories-note p { font-size: 18px; }
   .categories-note span { font-size: 12px; }
+  .trend-feed { padding-top: 27px; }
+  .trend-entry { grid-template-columns: minmax(0, 1fr); gap: 14px; padding-block: 23px 27px; }
+  .trend-date { flex-direction: row; flex-wrap: wrap; gap: 18px; padding: 0; }
+  .trend-month > h2 { font-size: 21px; margin-bottom: 0; }
+  .trend-content > h3 { font-size: 22px; }
+  .prose.trend-body { font-size: 15px; }
+  .trend-sources { font-size: 11px; }
+  .home-updates li { grid-template-columns: 90px minmax(0, 1fr); gap: 6px 12px; }
+  .home-updates li > a { grid-column: 1 / -1; font-size: 18px; }
   .article-topline { padding-top: 16px; }
   .article-heading { padding-block: 22px 26px; }
   .article-heading h1 { font-size: 30px; line-height: 1.65; margin-block: 15px; }

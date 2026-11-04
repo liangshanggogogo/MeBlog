@@ -2,7 +2,7 @@
 title: "AI 时代，如何实践第一性原理"
 description: "区分事实与假设，回到问题的起点。从理解第一性原理，到建立一套可以落地的思考与行动方法。"
 date: 2026-11-04
-category: reading
+category: cognition
 tags: [第一性原理, 思维方法, AI 时代]
 draft: false
 ---

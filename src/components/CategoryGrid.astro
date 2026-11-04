@@ -1,8 +1,8 @@
 ---
 import Icon from './Icon.astro';
-import { categories, url, type Article } from '../lib/blog';
-interface Props { articles: Article[]; }
-const { articles } = Astro.props;
+import { categories, trendSection, url, type Article, type Update } from '../lib/blog';
+interface Props { articles: Article[]; updates: Update[]; }
+const { articles, updates } = Astro.props;
 ---
 <div class="category-grid">
   {categories.map((category) => {
@@ -14,4 +14,10 @@ const { articles } = Astro.props;
       <span class="category-count">{count ? `${count} 篇文章` : '等待第一篇'}</span>
     </a>;
   })}
+  <a class="category-item category-item-trends" href={url('trends/')}>
+    <div class="category-icon"><Icon name={trendSection.icon} size={32} /><Icon name="arrow-up-right" size={17} /></div>
+    <h3>{trendSection.name}</h3>
+    <p>{trendSection.description}</p>
+    <span class="category-count">每日趋势 / 每周进展{updates.length ? ` · ${updates.length} 则` : ''}</span>
+  </a>
 </div>

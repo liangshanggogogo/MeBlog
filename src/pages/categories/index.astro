@@ -1,13 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
 import CategoryGrid from '../../components/CategoryGrid.astro';
-import { getArticles } from '../../lib/blog';
-const articles = await getArticles();
+import { getArticles, getUpdates } from '../../lib/blog';
+const [articles, updates] = await Promise.all([getArticles(), getUpdates()]);
 ---
-<Base title="文章分类" active="categories">
+<Base title="内容分类" active="categories">
   <div class="shell categories-page">
-    <header class="page-heading"><h1>兴趣，是最好的线索。</h1><p>从一个感兴趣的主题开始，看看我最近在学什么、想什么。</p></header>
-    <CategoryGrid articles={articles} />
-    <div class="categories-note"><p>学习与生活之间，没有那么清晰的边界。</p><span>这里的分类只是一条线索，文章也会彼此连接。</span></div>
+    <header class="page-heading"><h1>从理解，到实践与思考。</h1><p>三个方向的长期积累，加上一份持续更新的 AI 观察。</p></header>
+    <CategoryGrid articles={articles} updates={updates} />
+    <div class="categories-note"><p>读书、访谈和博客，都是思考的起点。</p><span>按文章想回答的问题归类：原理是什么，实际怎么做，以及自己的认知如何改变。</span></div>
   </div>
 </Base>

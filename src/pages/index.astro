@@ -2,8 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import CategoryGrid from '../components/CategoryGrid.astro';
-import { getArticles, url, categoryFor, articleUrl, shortDate, readingMinutes } from '../lib/blog';
-const articles = await getArticles();
+import { getArticles, getUpdates, url, categoryFor, articleUrl, shortDate, readingMinutes, cadenceLabels, updateUrl } from '../lib/blog';
+const [articles, updates] = await Promise.all([getArticles(), getUpdates()]);
 const latest = articles[0];
 ---
 <Base>
@@ -12,7 +12,7 @@ const latest = articles[0];
       <div class="hero-copy">
         <p class="hello">你好，我是 Liang Shang。</p>
         <h1 id="hero-title">在实践中探索，<br /><span>在记录中思考。</span></h1>
-        <p class="hero-description">关于 AI、技术、阅读，也关于日常生活。<br />把学到的东西讲清楚，把值得记住的瞬间留下来。</p>
+        <p class="hero-description">拆解技术，动手实践，也更新自己的认知。<br />把学到的东西讲清楚，记录 AI 时代的变化。</p>
         <a class="text-link hero-link" href={url('articles/')}>读一篇文章 <Icon name="arrow-right" size={21} /></a>
       </div>
       <figure class="hero-art">
@@ -39,7 +39,11 @@ const latest = articles[0];
 
     <section class="topics-section" aria-labelledby="topics-title">
       <div class="section-heading"><h2 id="topics-title">沿着兴趣阅读</h2><a class="quiet-link" href={url('categories/')}>所有分类 <Icon name="arrow-right" size={17} /></a></div>
-      <CategoryGrid articles={articles} />
+      <CategoryGrid articles={articles} updates={updates} />
     </section>
+    {updates.length > 0 && <section class="home-updates" aria-labelledby="updates-title">
+      <div class="section-heading"><h2 id="updates-title">近期短札</h2><a class="quiet-link" href={url('trends/')}>趋势与进展 <Icon name="arrow-right" size={17} /></a></div>
+      <ul>{updates.slice(0, 3).map((update) => <li><time datetime={update.data.date.toISOString()}>{shortDate(update.data.date)}</time><span>{cadenceLabels[update.data.cadence]}</span><a href={updateUrl(update)}>{update.data.title}<Icon name="arrow-up-right" size={17} /></a></li>)}</ul>
+    </section>}
   </div>
 </Base>

@@ -2,7 +2,7 @@
 title: "文章标题"
 description: "用一两句话说明这篇文章在讨论什么。"
 date: 2026-11-04
-category: ai
+category: principles
 tags: []
 draft: true
 ---

@@ -2,11 +2,20 @@ import { defineConfig } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
 import { readingMarkup } from './src/lib/reading-markup.mjs';
 
+const basePath = process.env.BASE_PATH || '/MeBlog';
+const withBase = (path) => `${basePath.replace(/\/$/, '')}${path}`;
+
 export default defineConfig({
   site: process.env.SITE_URL || 'https://liangshanggogogo.github.io',
-  base: process.env.BASE_PATH || '/MeBlog',
+  base: basePath,
   trailingSlash: 'always',
   output: 'static',
+  redirects: {
+    '/categories/ai/': withBase('/categories/practice/'),
+    '/categories/tutorials/': withBase('/categories/principles/'),
+    '/categories/reading/': withBase('/categories/cognition/'),
+    '/categories/life/': withBase('/categories/'),
+  },
   devToolbar: { enabled: false },
   vite: {
     plugins: [{

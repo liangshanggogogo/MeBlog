@@ -1,0 +1,23 @@
+---
+import { render } from 'astro:content';
+import { cadenceLabels, dateLabel, updateId, updateUrl, type Update } from '../lib/blog';
+interface Props { updates: Update[]; }
+const { updates } = Astro.props;
+const entries = await Promise.all(updates.map(async (update) => ({ update, ...await render(update) })));
+const months = [...new Set(updates.map((update) => update.data.date.toISOString().slice(0, 7)))];
+const monthLabel = (month: string) => `${month.slice(0, 4)} 年 ${Number(month.slice(5))} 月`;
+---
+<div class="trend-feed">
+  {months.map((month) => <section class="trend-month" aria-labelledby={`month-${month}`}>
+    <h2 id={`month-${month}`}>{monthLabel(month)}</h2>
+    {entries.filter(({ update }) => update.data.date.toISOString().startsWith(month)).map(({ update, Content }) => <article class="trend-entry" id={updateId(update)}>
+      <div class="trend-date"><time datetime={update.data.date.toISOString()}>{dateLabel(update.data.date)}</time><span>{cadenceLabels[update.data.cadence]}</span></div>
+      <div class="trend-content">
+        <h3>{update.data.title}</h3>
+        <div class="prose trend-body"><Content /></div>
+        {update.data.sources.length > 0 && <div class="trend-sources"><span>来源</span><ul>{update.data.sources.map((source) => <li><a href={source.url}>{source.label}</a></li>)}</ul></div>}
+        <a class="trend-permalink" href={updateUrl(update)} aria-label={`这则短札的固定链接：${update.data.title}`}>短札链接 <span aria-hidden="true">↗</span></a>
+      </div>
+    </article>)}
+  </section>)}
+</div>

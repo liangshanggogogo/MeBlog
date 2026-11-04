@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import TrendFeed from './TrendFeed.astro';
+import { getUpdates, cadenceLabels, url, type Update } from '../lib/blog';
+interface Props { cadence?: Update['data']['cadence']; }
+const { cadence } = Astro.props;
+const updates = await getUpdates();
+const filtered = cadence ? updates.filter((update) => update.data.cadence === cadence) : updates;
+const filters = [
+  { label: '全部短札', path: 'trends/', value: undefined, count: updates.length },
+  { label: cadenceLabels.daily, path: 'trends/daily/', value: 'daily', count: updates.filter((update) => update.data.cadence === 'daily').length },
+  { label: cadenceLabels.weekly, path: 'trends/weekly/', value: 'weekly', count: updates.filter((update) => update.data.cadence === 'weekly').length },
+];
+---
+<Base title={cadence ? `${cadenceLabels[cadence]} · 趋势与进展` : '趋势 / 进展'} description="用每日短札记录 AI 的新产品、新概念与新能力，用每周回顾整理值得关注的进展。" active="trends">
+  <div class="shell trends-page">
+    <header class="page-heading"><h1>趋势 / 进展</h1><p>新的产品、概念与能力，先记下发生了什么，再想想它意味着什么。</p></header>
+    <nav class="category-tabs" aria-label="短札频率">
+      {filters.map((filter) => <a href={url(filter.path)} class:list={{ selected: cadence === filter.value }} aria-current={cadence === filter.value ? 'page' : undefined}>{filter.label}<span>{filter.count}</span></a>)}
+    </nav>
+    {filtered.length ? <TrendFeed updates={filtered} /> : <div class="empty-state"><Icon name="sun-horizon" size={46} /><h2>{cadence === 'weekly' ? '这一周，值得记下什么？' : '留意变化，也留下思考。'}</h2><p>{cadence === 'weekly' ? '每周串起重要的进展，回看它们意味着什么。' : cadence === 'daily' ? '把每天值得关注的新变化，写成几段短札。' : '按日记录新变化，按周串起线索。第一则短札还在酝酿。'}</p><a class="text-link" href={url('articles/')}>先读一篇文章 <Icon name="arrow-right" size={18} /></a></div>}
+  </div>
+</Base>

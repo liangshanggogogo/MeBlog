@@ -6,7 +6,7 @@ const articles = await getArticles();
 ---
 <Base title="全部文章" active="articles">
   <div class="shell archive-page">
-    <header class="page-heading"><h1>写下来的，留下来。</h1><p>AI 实践、技术学习、书页间的思考，还有生活里的小事。</p></header>
+    <header class="page-heading"><h1>写下来的，留下来。</h1><p>技术原理的拆解、动手实践的记录，以及系统与认知的思考。</p></header>
     <nav class="category-tabs" aria-label="按分类阅读">
       <a class="selected" href={url('articles/')} aria-current="page">全部文章 <span>{articles.length}</span></a>
       {categories.map((category) => <a href={url(`categories/${category.id}/`)}>{category.name}<span>{articles.filter((a) => a.data.category === category.id).length}</span></a>)}
