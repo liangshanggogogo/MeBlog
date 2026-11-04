@@ -1,13 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
 import CategoryGrid from '../../components/CategoryGrid.astro';
-import { getArticles, getUpdates } from '../../lib/blog';
-const [articles, updates] = await Promise.all([getArticles(), getUpdates()]);
+import { getArticles } from '../../lib/blog';
+const articles = await getArticles();
 ---
-<Base title="内容分类" active="categories">
+<Base title="模块 / 系列" active="categories">
   <div class="shell categories-page">
-    <header class="page-heading"><h1>从理解，到实践与思考。</h1><p>三个方向的长期积累，加上一份持续更新的 AI 观察。</p></header>
-    <CategoryGrid articles={articles} updates={updates} />
-    <div class="categories-note"><p>读书、访谈和博客，都是思考的起点。</p><span>按文章想回答的问题归类：原理是什么，实际怎么做，以及自己的认知如何改变。</span></div>
+    <header class="page-heading"><h1>模块 / 系列</h1><p>关注变化，理解原理，动手构造，也更新自己的认知。</p></header>
+    <CategoryGrid articles={articles} headingLevel="h2" />
+    <div class="categories-note"><p>从一次关注，走向更深的理解。</p><span>书、访谈、博客与亲手实践，都可以成为下一篇记录的起点。</span></div>
   </div>
 </Base>

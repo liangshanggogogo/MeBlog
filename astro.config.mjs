@@ -11,6 +11,9 @@ export default defineConfig({
   trailingSlash: 'always',
   output: 'static',
   redirects: {
+    '/trends/': withBase('/categories/trends/'),
+    '/trends/daily/': withBase('/categories/trends/'),
+    '/trends/weekly/': withBase('/categories/trends/'),
     '/categories/ai/': withBase('/categories/practice/'),
     '/categories/tutorials/': withBase('/categories/principles/'),
     '/categories/reading/': withBase('/categories/cognition/'),

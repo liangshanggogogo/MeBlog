@@ -1,0 +1,20 @@
+---
+import { Image } from 'astro:assets';
+import { categoryFor, articleUrl, shortDate, url, type Article } from '../lib/blog';
+interface Props { articles: Article[]; archive?: boolean; }
+const { articles, archive = false } = Astro.props;
+---
+<div class:list={['article-grid', { 'archive-cards': archive }]}>
+  {articles.map((article) => <article class="article-card">
+    <a class="article-card-link" href={articleUrl(article)} aria-label={`阅读：${article.data.title}`}>
+      <div class="article-card-art">
+        {article.data.cover && <Image src={article.data.cover} alt={article.data.coverAlt || ''} width={720} height={480} widths={[320, 480, 720]} sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) 44vw, 360px" fit="contain" format="webp" loading="lazy" decoding="async" />}
+      </div>
+      <h3>{article.data.title}</h3>
+    </a>
+    <div class="article-card-meta">
+      <a href={url(`categories/${article.data.category}/`)}>{categoryFor(article.data.category).name}</a>
+      <time datetime={article.data.date.toISOString()}>{shortDate(article.data.date)}</time>
+    </div>
+  </article>)}
+</div>

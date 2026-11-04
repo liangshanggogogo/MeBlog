@@ -21,5 +21,9 @@ Use case: illustration-story. Asset type: original hero illustration for LIANG S
 
 - Noto Serif SC Variable：SIL Open Font License，来自 `@fontsource-variable/noto-serif-sc`。
 - Newsreader Variable：SIL Open Font License，来自 `@fontsource-variable/newsreader`。
-- Phosphor Icons：MIT，来自 `@phosphor-icons/core`；页眉、导航、分类及 favicon 使用其 light 图标。
+- Phosphor Icons：MIT，来自 `@phosphor-icons/core`；页眉、箭头、主题切换及 favicon 使用其 light 图标。四个模块已改为专用手绘插画。
 - 原始许可保存在相应 npm 包内，依赖版本由 `package-lock.json` 固定。
+
+## 模块插画与文章封面
+
+四个模块的手绘图片位于 `public/images/modules/`，第一性原理文章封面位于 `src/content/articles/first-principles/assets/cover.webp`。2026-11-04 使用内置 `image_gen` 分别生成，以首页插画作为画法与配色参考；原文中的流程图保留。图片保留透明通道，采用 WebP 压缩。完整提示词、文件清单及后续封面规范见 [手绘插图规范](illustration-style.md)。

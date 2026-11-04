@@ -1,6 +1,6 @@
 # LIANG SHANG BLOG
 
-一个用于拆解技术原理、记录动手实践、更新个人认知和观察 AI 进展的个人博客。前三个方向以文章沉淀，趋势以每日、每周短札连续记录。使用 Astro 生成静态页面，内容保存在仓库里的 Markdown 文件中，部署目标是 GitHub Pages。
+一个用于关注 AI 变化、拆解技术原理、记录项目实践和更新个人认知的个人博客。四个模块统一使用文章列表与详情页，内容可以是长文，也可以是简短观察。使用 Astro 生成静态页面，内容保存在仓库里的 Markdown 文件中，部署目标是 GitHub Pages。
 
 ## 本地预览
 
@@ -22,7 +22,7 @@ npm run preview  # 预览实际部署的静态产物
 
 1. 在 `src/content/articles/` 下创建一个英文短名称的文件夹，比如 `minimind-training/`。
 2. 把 `templates/article.md` 复制为这个文件夹中的 `index.md`。
-3. 填写文章信息，撰写正文。准备发布时把 `draft` 改为 `false`。
+3. 填写文章信息、封面路径与说明，撰写正文。准备发布时把 `draft` 改为 `false`。
 4. 图片放在同一文件夹下的 `assets/` 中，用相对路径引用：`![图片说明](./assets/example.png)`。
 5. 本地预览确认，提交并推送到 `main`。GitHub Pages 启用后，文章会自动发布。
 
@@ -32,24 +32,27 @@ title: "从零理解 LLM 训练"
 description: "这篇文章要解决的问题，以及你会得到什么。"
 date: 2026-11-04
 category: principles
+cover: ./assets/cover.webp
+coverAlt: "与 LLM 训练原理对应的手绘插图。"
 tags: [LLM, 实践]
 draft: false
 ---
 ```
 
-分类值：
+模块值（也是网站的展示顺序）：
 
 | `category` | 网站显示 | 主要回答的问题 |
 | --- | --- | --- |
+| `trends` | 趋势 / 关注 | 出现了什么值得关注的变化？它意味着什么？ |
 | `principles` | 原理 / 技术 | 技术为什么这样工作？如何把复杂原理讲清楚？ |
-| `practice` | 动手 / 实践 | 怎么做？实际效果如何？有哪些限制和经验？ |
+| `practice` | 实践 / 项目 | 怎么做？实际效果如何？有哪些限制和经验？ |
 | `cognition` | 系统 / 认知 | 如何改进自己的学习、判断，以及与 AI 协作的方法？ |
 
-按文章要回答的问题选一个主分类。读书、访谈、博客翻译是素材来源，可以放在标签中，不作为独立分类。例如 LLM 训练原理放入「原理 / 技术」，MiniMind 实战放入「动手 / 实践」，第一性原理与费曼学习法放入「系统 / 认知」。
+按文章要回答的问题选一个主分类。读书、访谈、博客翻译是素材来源，可以放在标签中，不作为独立分类。例如 LLM 训练原理放入「原理 / 技术」，MiniMind 实战放入「实践 / 项目」，第一性原理与费曼学习法放入「系统 / 认知」。
 
-可以另外添加 `updated: 2026-11-05` 显示修改日期。发布日期按 UTC 日期呈现，避免时区导致日期变化。`draft: true` 的文章不会生成页面，也不会出现在列表、数量和首页中。日期不用于自动预约发布。
+可以另外添加 `updated: 2026-11-05` 显示修改日期。发布日期按 UTC 日期呈现，避免时区导致日期变化。`draft: true` 的文章不会生成页面，也不会出现在列表、数量和首页中。日期不用于自动预约发布。首页按日期倒序显示最近 6 篇，包含四个模块；每项展示插图、标题、模块与日期。简介保留用于文章详情和页面描述，不在文章列表显示。同一天的文章按文件名排序。
 
-文件夹名决定文章地址，例如 `first-principles/index.md` 对应 `/MeBlog/articles/first-principles/`。文章发布后尽量保留文件夹名，避免旧链接失效。无需图片的文章也可以直接使用 `src/content/articles/my-article.md`。
+文件夹名决定文章地址，例如 `first-principles/index.md` 对应 `/MeBlog/articles/first-principles/`。文章发布后尽量保留文件夹名，避免旧链接失效。
 
 ### 从 Notion 导出
 
@@ -57,26 +60,17 @@ draft: false
 
 本站渲染普通 Markdown，不需要在编辑器里使用专有组件。二级、三级标题自动生成目录；表格在窄屏上横向滚动；代码块自动高亮；正文中的本地图片在构建时自动优化。
 
-## 发布每日趋势或每周进展
+## 文章封面
 
-「趋势 / 进展」是单独的短札时间流。读者直接在列表中阅读正文，并可切换每日、每周；每则短札有固定链接，不会混入文章列表和文章数量中。
+每篇已发布文章需要一张与主题对应的手绘封面：横向 3:2，建议 1200 × 800，铅笔线条、少量水彩、灰绿与陶土色、透明背景。将封面放入文章的 `assets/` 文件夹，通过 `cover` 引用，并填写 `coverAlt` 文字说明。草稿可以暂不填写；正式发布时构建会检查缺失的封面和说明。
 
-1. 从 `templates/daily-note.md` 或 `templates/weekly-note.md` 复制一份到 `src/content/updates/`，例如 `2026-11-04-daily.md`。
-2. 填写标题、日期与正文。`cadence: daily` 表示每日趋势，`cadence: weekly` 表示每周进展。
-3. 在 `sources` 中填写来源链接，或保留空数组 `[]`。正文中也可以使用普通 Markdown 链接。
-4. 准备发布时将 `draft` 改为 `false`，预览并提交。首页会显示最近三则短札的入口。
+图片会自动生成适合手机与桌面的尺寸。制作下一篇封面时，参考 [手绘插图规范与提示词](docs/illustration-style.md)，保持画法一致，按文章内容更换构图。第一性原理的封面以拆开的积木和放大镜表现“回到基本事实”。
 
-```yaml
----
-title: "今天值得记下的一项变化"
-date: 2026-11-04
-cadence: daily
-sources: []
-draft: true
----
-```
+## 发布趋势与关注
 
-来源填写格式为：
+使用 `templates/trend-note.md`，和其他文章一样保存到 `src/content/articles/`。模块填写 `category: trends`，可以只写几段观察，不要求每天或每周发布，也没有频率筛选。
+
+来源链接可以写在正文里，也可以填写 `sources`，网站会在正文末尾显示“参考来源”：
 
 ```yaml
 sources:
@@ -84,9 +78,7 @@ sources:
     url: "https://example.com/announcement"
 ```
 
-每日短札适合写清楚发生了什么、为什么关注、自己的判断。每周进展适合串起重要变化，提炼共同方向。两者都由你撰写和提交，不会自动抓取资讯或按日期发布。短札按日期倒序、按月份分组；同一天有多则时按文件名排序。
-
-短札也支持图片：需要图片时使用 `src/content/updates/英文名称/index.md` 和同目录的 `assets/`，在正文里写相对路径。发布后保持文件名和路径不变，以保留固定链接。仓库中的 `first-note.md` 是未发布草稿，第一版没有填充示例新闻。
+「趋势 / 关注」使用与其他模块相同的图文列表和文章详情，也会出现在首页最新文章中。旧的 `/trends/`、`/trends/daily/` 和 `/trends/weekly/` 地址会跳转到 `/categories/trends/`。原先未发布的 `first-note.md` 已移动到文章目录，并保留为草稿。
 
 ## GitHub Pages
 
@@ -113,12 +105,13 @@ sources:
 - 全站颜色、字体、间距和响应式布局：`src/styles/global.css`
 - 页眉、页脚与深色模式：`src/layouts/Base.astro`
 - 文章页：`src/pages/articles/[...slug].astro`
-- 趋势页和短札列表：`src/components/TrendIndex.astro`、`src/components/TrendFeed.astro`
+- 首页与模块文章列表：`src/components/ArticleCards.astro`、`src/components/ArticleList.astro`
+- 模块手绘插画：`public/images/modules/` 与 `src/components/ModuleArt.astro`
 - 首页插画：`public/images/growing-thoughts.webp`
 
 第一版采用暖纸色、墨绿、中文宋体与英文衬线字体，少量入场及悬停动画。深色模式默认跟随系统，手动切换后记住选择。启用系统“减少动态效果”时关闭动画。
 
-字体随站点托管，不依赖外部字体服务。中文字体使用 `font-display: optional`：网络较慢时优先保持系统宋体显示，避免下载大字体后突然改变阅读排版；缓存命中时可直接使用站点字体。图标来自 Phosphor。首页插画由内置图像生成工具制作，提示词和素材说明见 `docs/assets.md`。
+字体随站点托管，不依赖外部字体服务。中文字体使用 `font-display: optional`：网络较慢时优先保持系统宋体显示，避免下载大字体后突然改变阅读排版；缓存命中时可直接使用站点字体。箭头、主题切换等功能图标来自 Phosphor。首页主插画、模块插画与文章封面由内置图像生成工具制作，素材说明见 `docs/assets.md`，本次插图提示词和后续制作规范见 `docs/illustration-style.md`。
 
 ## 演示稿件
 

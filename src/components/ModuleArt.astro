@@ -1,0 +1,6 @@
+---
+import { url, type CategoryId } from '../lib/blog';
+interface Props { category: CategoryId; size?: number; }
+const { category, size = 92 } = Astro.props;
+---
+<img class="module-art" src={url(`images/modules/${category}.webp`)} width={size} height={size} alt="" loading="lazy" decoding="async" />

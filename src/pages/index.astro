@@ -2,9 +2,10 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import CategoryGrid from '../components/CategoryGrid.astro';
-import { getArticles, getUpdates, url, categoryFor, articleUrl, shortDate, readingMinutes, cadenceLabels, updateUrl } from '../lib/blog';
-const [articles, updates] = await Promise.all([getArticles(), getUpdates()]);
-const latest = articles[0];
+import ArticleCards from '../components/ArticleCards.astro';
+import { getArticles, url } from '../lib/blog';
+const articles = await getArticles();
+const latest = articles.slice(0, 6);
 ---
 <Base>
   <div class="shell">
@@ -22,28 +23,12 @@ const latest = articles[0];
 
     <section class="latest-section" aria-labelledby="latest-title">
       <div class="section-heading"><h2 id="latest-title">最新文章</h2><a class="quiet-link" href={url('articles/')}>全部文章 <Icon name="arrow-right" size={17} /></a></div>
-      {latest ? <article class="featured-article">
-        <div class="featured-main">
-          <div class="article-meta"><a href={url(`categories/${latest.data.category}/`)}>{categoryFor(latest.data.category).name}</a><span>约 {readingMinutes(latest.body)} 分钟</span></div>
-          <h3><a href={articleUrl(latest)}>{latest.data.title}</a></h3>
-          <p>{latest.data.description}</p>
-          <div class="featured-bottom"><time datetime={latest.data.date.toISOString()}>{shortDate(latest.data.date)}</time><a class="text-link" href={articleUrl(latest)}>继续阅读 <Icon name="arrow-right" size={18} /></a></div>
-        </div>
-        <aside class="featured-aside" aria-label="文章主题">
-          <Icon name="plant" size={34} />
-          <p>{latest.data.tags[0] || categoryFor(latest.data.category).name}</p>
-          <span>从一个问题出发，<br />多想一步，也动手试一试。</span>
-        </aside>
-      </article> : <p class="empty-inline">第一篇文章正在路上。</p>}
+      {latest.length ? <ArticleCards articles={latest} /> : <p class="empty-inline">第一篇文章正在路上。</p>}
     </section>
 
     <section class="topics-section" aria-labelledby="topics-title">
-      <div class="section-heading"><h2 id="topics-title">沿着兴趣阅读</h2><a class="quiet-link" href={url('categories/')}>所有分类 <Icon name="arrow-right" size={17} /></a></div>
-      <CategoryGrid articles={articles} updates={updates} />
+      <div class="section-heading"><h2 id="topics-title">模块 / 系列</h2><a class="quiet-link" href={url('categories/')}>全部模块 <Icon name="arrow-right" size={17} /></a></div>
+      <CategoryGrid articles={articles} />
     </section>
-    {updates.length > 0 && <section class="home-updates" aria-labelledby="updates-title">
-      <div class="section-heading"><h2 id="updates-title">近期短札</h2><a class="quiet-link" href={url('trends/')}>趋势与进展 <Icon name="arrow-right" size={17} /></a></div>
-      <ul>{updates.slice(0, 3).map((update) => <li><time datetime={update.data.date.toISOString()}>{shortDate(update.data.date)}</time><span>{cadenceLabels[update.data.cadence]}</span><a href={updateUrl(update)}>{update.data.title}<Icon name="arrow-up-right" size={17} /></a></li>)}</ul>
-    </section>}
   </div>
 </Base>

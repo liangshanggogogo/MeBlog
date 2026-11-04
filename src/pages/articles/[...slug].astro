@@ -9,6 +9,7 @@ export async function getStaticPaths() {
 }
 const { article } = Astro.props;
 const { Content, headings } = await render(article);
+const outline = article.data.sources.length ? [...headings, { depth: 2, slug: 'article-reference-sources', text: '参考来源' }] : headings;
 const category = categoryFor(article.data.category);
 const jsonLd = {
   '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.data.title,
@@ -23,15 +24,17 @@ const jsonLd = {
   <div class="article-shell shell">
     <div class="article-topline"><a class="quiet-link" href={url('articles/')}><Icon name="arrow-left" size={17} />全部文章</a></div>
     <header class="article-heading">
-      <a class="category-label" href={url(`categories/${category.id}/`)}><Icon name={category.icon} size={18} />{category.name}</a>
+      <a class="category-label" href={url(`categories/${category.id}/`)}>{category.name}</a>
       <h1>{article.data.title}</h1>
       <p class="article-deck">{article.data.description}</p>
       <div class="byline"><span>Liang Shang</span><time datetime={article.data.date.toISOString()}>{dateLabel(article.data.date)}</time><span>约 {readingMinutes(article.body)} 分钟</span></div>
       {article.data.updated && <p class="updated-date">更新于 {dateLabel(article.data.updated)}</p>}
     </header>
     <div class="reading-layout">
-      <TableOfContents headings={headings} />
-      <article class="prose"><Content /></article>
+      <TableOfContents headings={outline} />
+      <article class="prose"><Content />
+        {article.data.sources.length > 0 && <section class="article-sources" aria-label="参考来源"><h2 id="article-reference-sources">参考来源</h2><ul>{article.data.sources.map((source) => <li><a href={source.url}>{source.label}</a></li>)}</ul></section>}
+      </article>
     </div>
     <div class="article-ending">
       <Icon name="plant" size={30} /><p>感谢你读到这里。</p>

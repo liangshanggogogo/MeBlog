@@ -3,7 +3,11 @@ title: "文章标题"
 description: "用一两句话说明这篇文章在讨论什么。"
 date: 2026-11-04
 category: principles
+# 封面放进文章的 assets 文件夹，再取消下面两行的注释。
+# cover: ./assets/cover.webp
+# coverAlt: "简要描述插图内容。"
 tags: []
+sources: []
 draft: true
 ---
 

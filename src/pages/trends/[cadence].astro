@@ -1,8 +1,0 @@
----
-import TrendIndex from '../../components/TrendIndex.astro';
-export function getStaticPaths() {
-  return (['daily', 'weekly'] as const).map((cadence) => ({ params: { cadence }, props: { cadence } }));
-}
-const { cadence } = Astro.props;
----
-<TrendIndex cadence={cadence} />
